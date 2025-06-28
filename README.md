@@ -25,7 +25,7 @@ EasyBook is a web-based booking platform for local services such as spas, barber
 
 1. Clone the repository:
     ```sh
-    git clone <your-repo-url>
+    git clone https://github.com/rodeldichoso/easybook-laravel.git
     cd Booking_System
     ```
 2. Install PHP dependencies:
