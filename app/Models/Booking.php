@@ -16,6 +16,7 @@ class Booking extends Model
         'id',
         'public_id',
         'user_id',
+        'shop_id',
         'service_name',
         'appointment_date',
         'appointment_time',
@@ -26,5 +27,9 @@ class Booking extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+    public function shop()
+    {
+        return $this->belongsTo(Shop::class, 'shop_id');
     }
 }

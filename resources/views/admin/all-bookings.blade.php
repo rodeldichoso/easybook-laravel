@@ -14,7 +14,7 @@
                 <table class="table table-hover align-middle">
                     <thead class="table-light">
                         <tr>
-                            <th>ID</th>
+                            <th>Booking ID</th>
                             <th>User</th>
                             <th>Service</th>
                             <th>Shop</th>
@@ -26,11 +26,11 @@
                     <tbody>
                         @foreach($bookings as $booking)
                         <tr>
-                            <td>{{ $booking->id }}</td>
+                            <td>{{ $booking->public_id }}</td>
                             <td>{{ $booking->user->first_name }} {{ $booking->user->last_name }}</td>
-                            <td>{{ $booking->service_name }}</td>
-                            <td>{{ $booking->shop_name }}</td>
-                            <td>{{ \Carbon\Carbon::parse($booking->date)->format('M d, Y') }}</td>
+                            <td>{{ $booking->shop->shop_category ?? '—' }}</td>
+                            <td>{{ $booking->shop->shop_name ?? '—' }}</td>
+                            <td>{{ \Carbon\Carbon::parse($booking->appointment_date)->format('M d, Y') }}</td>
                             <td>
                                 <span class="badge bg-{{ $booking->status === 'completed' ? 'success' : ($booking->status === 'cancelled' ? 'danger' : 'secondary') }}">
                                     {{ ucfirst($booking->status) }}

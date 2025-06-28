@@ -23,10 +23,10 @@
                         <tr>
                             <th>ID</th>
                             <th>Shop Name</th>
-                            <th>Owner</th>
+                            <th>Added By</th>
                             <th>Location</th>
                             <th>Category</th>
-                            <th>Created</th>
+                            <th>Added At</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -40,7 +40,7 @@
                             <td>{{ $shop->shop_category }}</td>
                             <td>{{ $shop->created_at->format('M d, Y') }}</td>
                             <td>
-                                <a href="" class="btn btn-sm btn-primary">
+                                <a href="#" class="btn btn-sm btn-primary">
                                     <i class="bi bi-pencil"></i>
                                 </a>
                                 <form action="" method="POST" class="d-inline">

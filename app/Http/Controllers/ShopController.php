@@ -8,6 +8,12 @@ use Illuminate\Support\Facades\Auth;
 
 class ShopController extends Controller
 {
+    function index()
+    {
+        $shops = Shop::with('admin')->get();
+        return view('admin.manage-shops', compact('shops'));
+    }
+
     public function CreateShop(Request $request)
     {
 
@@ -23,8 +29,27 @@ class ShopController extends Controller
 
         $payload['admin_id'] = Auth::id();
 
-        Shop::create($payload);
+        $shop = Shop::create($payload);
+
+        // Save services if provided
+        if ($request->has('services')) {
+            foreach ($request->input('services') as $service) {
+                if (!empty($service['service_name'])) {
+                    $shop->services()->create([
+                        'service_name' => $service['service_name'],
+                        'price' => $service['price'] ?? null,
+                        'description' => $service['description'] ?? null,
+                    ]);
+                }
+            }
+        }
 
         return redirect()->route('admin.shops')->with('success', 'Shop created successfully.');
+    }
+
+    public function showBookingForm()
+    {
+        $shops = Shop::all();
+        return view('create-booking', compact('shops'));
     }
 }

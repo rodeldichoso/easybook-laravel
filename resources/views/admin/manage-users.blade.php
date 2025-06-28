@@ -6,6 +6,17 @@
 <div class="py-4">
     <h2 class="fw-bold mb-4">Manage Users</h2>
 
+    <!-- Filter Dropdown -->
+    <form method="GET" class="mb-3 d-flex align-items-center" action="">
+        <label for="role" class="me-2 mb-0 fw-semibold">Filter by Role:</label>
+        <select name="role" id="role" class="form-select w-auto me-2">
+            <option value="">All</option>
+            <option value="admin">Admin</option>
+            <option value="user">User</option>
+        </select>
+        <button type="submit" class="btn btn-primary btn-sm">Filter</button>
+    </form>
+
     <div class="card shadow-sm">
         <div class="card-header bg-white fw-bold">Registered Users</div>
         <div class="card-body">

@@ -13,6 +13,12 @@ use Illuminate\Support\Facades\Cookie;
 
 class UserController extends Controller
 {
+
+    public function index()
+    {
+        $users = User::all();
+        return view('admin.manage-users', compact('users'));
+    }
     public function UserCreate(Request $request)
     {
         $payload = $request->validate([
