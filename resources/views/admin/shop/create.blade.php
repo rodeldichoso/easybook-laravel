@@ -34,8 +34,8 @@
 
                 <div class="mb-3">
                     <label class="form-label">Services</label>
-                    <div class="border rounded p-3 mb-2 bg-light">
-                        <div class="row g-2 align-items-end mb-2">
+                    <div class="border rounded p-3 mb-2 bg-light" id="services-container">
+                        <div class="row g-2 align-items-end mb-2 service-row">
                             <div class="col-md-5">
                                 <input type="text" name="services[0][service_name]" class="form-control" placeholder="Service Name" required>
                             </div>
@@ -46,30 +46,9 @@
                                 <input type="text" name="services[0][description]" class="form-control" placeholder="Description">
                             </div>
                         </div>
-                        <div class="row g-2 align-items-end mb-2">
-                            <div class="col-md-5">
-                                <input type="text" name="services[1][service_name]" class="form-control" placeholder="Service Name">
-                            </div>
-                            <div class="col-md-3">
-                                <input type="number" name="services[1][price]" class="form-control" placeholder="Price" min="0" step="0.01">
-                            </div>
-                            <div class="col-md-4">
-                                <input type="text" name="services[1][description]" class="form-control" placeholder="Description">
-                            </div>
-                        </div>
-                        <div class="row g-2 align-items-end">
-                            <div class="col-md-5">
-                                <input type="text" name="services[2][service_name]" class="form-control" placeholder="Service Name">
-                            </div>
-                            <div class="col-md-3">
-                                <input type="number" name="services[2][price]" class="form-control" placeholder="Price" min="0" step="0.01">
-                            </div>
-                            <div class="col-md-4">
-                                <input type="text" name="services[2][description]" class="form-control" placeholder="Description">
-                            </div>
-                        </div>
-                        <div class="form-text mt-2">You can leave unused service fields blank.</div>
                     </div>
+                    <button type="button" class="btn btn-outline-secondary btn-sm" id="add-service-btn"><i class="bi bi-plus-circle"></i> Add Service</button>
+                    <div class="form-text mt-2">You can add your shop services here.</div>
                 </div>
 
                 <button type="submit" class="btn btn-primary">Create Shop</button>
@@ -79,3 +58,36 @@
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<script>
+    let serviceCount = 1;
+    const servicesContainer = document.getElementById('services-container');
+    const addServiceBtn = document.getElementById('add-service-btn');
+
+    addServiceBtn.addEventListener('click', function() {
+        const row = document.createElement('div');
+        row.className = 'row g-2 align-items-end mb-2 service-row';
+        row.innerHTML = `
+        <div class="col-md-5">
+            <input type="text" name="services[${serviceCount}][service_name]" class="form-control" placeholder="Service Name" required>
+        </div>
+        <div class="col-md-3">
+            <input type="number" name="services[${serviceCount}][price]" class="form-control" placeholder="Price" min="0" step="0.01">
+        </div>
+        <div class="col-md-4 d-flex">
+            <input type="text" name="services[${serviceCount}][description]" class="form-control me-2" placeholder="Description">
+            <button type="button" class="btn btn-outline-danger btn-sm remove-service-btn"><i class="bi bi-x"></i></button>
+        </div>
+    `;
+        servicesContainer.appendChild(row);
+        serviceCount++;
+    });
+
+    servicesContainer.addEventListener('click', function(e) {
+        if (e.target.closest('.remove-service-btn')) {
+            e.target.closest('.service-row').remove();
+        }
+    });
+</script>
+@endpush

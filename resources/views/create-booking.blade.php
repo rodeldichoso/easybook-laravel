@@ -42,25 +42,30 @@
 
     <div class="list-group" id="shopList">
         @foreach ($shops as $shop)
-        <div class="list-group-item mb-3 p-0 shadow-sm shop-card d-flex flex-md-row flex-column align-items-stretch" data-category="{{ $shop->shop_category }}">
-            <img src="{{ $shop->img ?? 'https://picsum.photos/seed/barber/180/180' }}" alt="{{ $shop->shop_name }}" class="object-fit-cover" style="width:180px; height:180px; border-radius:0.5rem 0 0 0.5rem; object-fit:cover;">
+        <div class="list-group-item mb-3 p-0 shadow-sm shop-card d-flex flex-md-row flex-column align-items-stretch" data-category="{{ $shop->shop_category }}" style="min-height:270px;">
+            <div class="shop-img-wrapper h-100" style="width:200px; min-width:200px; height:100%; display:flex; align-items:stretch;">
+                <img src="{{ $shop->img ?? 'https://picsum.photos/seed/barber/200/270' }}" alt="{{ $shop->shop_name }}" class="object-fit-cover w-100 h-100" style="height:100%; width:100%; border-radius:0.5rem 0 0 0.5rem; object-fit:cover;">
+            </div>
             <div class="flex-fill p-3 d-flex flex-column justify-content-between">
                 <div>
                     <span class="badge bg-primary mb-2">{{ $shop->shop_category }}</span>
                     <h5 class="card-title">{{ $shop->shop_name }}</h5>
                     <p class="text-muted small">📍 {{ $shop->shop_address }}</p>
                 </div>
-                <form action="{{ route('bookings.create') }}" method="POST" class="mt-2">
+                <form action="{{ route('bookings.create') }}" method="POST" class="mt-2 service-booking-form">
                     @csrf
                     <input type="hidden" name="shop_id" value="{{ $shop->id }}">
-                    <div class="mb-2">
-                        <label for="service_name_{{ $shop->id }}" class="form-label">Service</label>
-                        <select name="service_name" id="service_name_{{ $shop->id }}" class="form-select" required>
-                            <option value="">Select a service</option>
-                            @foreach($shop->services as $service)
-                            <option value="{{ $service->service_name }}">{{ $service->service_name }} @if($service->price) - ${{ number_format($service->price, 2) }} @endif</option>
-                            @endforeach
-                        </select>
+                    <div class="mb-2" id="services-select-container-{{ $shop->id }}">
+                        <label class="form-label">Services</label>
+                        <div class="input-group mb-2 service-select-row">
+                            <select name="services[]" class="form-select" required>
+                                <option value="">Select a service</option>
+                                @foreach($shop->services as $service)
+                                <option value="{{ $service->service_name }}">{{ $service->service_name }} @if($service->price) - ₱{{ number_format($service->price, 2) }} @endif</option>
+                                @endforeach
+                            </select>
+                            <button type="button" class="btn btn-outline-secondary btn-sm add-service-btn"><i class="bi bi-plus"></i></button>
+                        </div>
                     </div>
                     <div class="row g-2">
                         <div class="col-md-3 col-12 mb-2 mb-md-0">
@@ -99,6 +104,35 @@
             } else {
                 card.classList.remove("d-flex");
                 card.classList.add("d-none");
+            }
+        });
+    });
+
+    // Add multiple service select fields
+    document.querySelectorAll('.service-booking-form').forEach(function(form) {
+        form.addEventListener('click', function(e) {
+            if (e.target.classList.contains('add-service-btn')) {
+                e.preventDefault();
+                const container = form.querySelector('[id^="services-select-container-"]');
+                const selects = container.querySelectorAll('.service-select-row');
+                const newRow = selects[0].cloneNode(true);
+                // Reset the select value
+                newRow.querySelector('select').value = '';
+                // Add remove button if not present
+                let removeBtn = newRow.querySelector('.remove-service-btn');
+                if (!removeBtn) {
+                    removeBtn = document.createElement('button');
+                    removeBtn.type = 'button';
+                    removeBtn.className = 'btn btn-outline-danger btn-sm ms-2 remove-service-btn';
+                    removeBtn.innerHTML = '<i class="bi bi-x"></i>';
+                    newRow.appendChild(removeBtn);
+                }
+                container.appendChild(newRow);
+            }
+            if (e.target.classList.contains('remove-service-btn')) {
+                e.preventDefault();
+                const row = e.target.closest('.service-select-row');
+                if (row) row.remove();
             }
         });
     });

@@ -6,6 +6,15 @@
 <div class="py-4">
     <h2 class="fw-bold mb-4">Welcome back, {{ auth()->user()->first_name ?? 'User' }} {{ auth()->user()->last_name }}!</h2>
 
+    {{-- Notification --}}
+    @if(session('shop_created'))
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="bi bi-check-circle me-2"></i>
+        {{ session('shop_created') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    @endif
+
     {{-- Admin Dashboard --}}
     @roles(['admin'])
     <div class="row g-4 mb-5">
@@ -35,6 +44,27 @@
         </div>
     </div>
 
+    {{-- Admin Notifications --}}
+    @if(isset($activities) && count($activities))
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-white fw-bold">Recent Admin Activity</div>
+        <div class="card-body">
+            <ul class="list-group">
+                @foreach($activities as $activity)
+                <li class="list-group-item d-flex align-items-center">
+                    <i class="bi bi-bell-fill text-primary me-2"></i>
+                    <span>
+                        <strong>{{ $activity->admin->first_name ?? 'Unknown' }} {{ $activity->admin->last_name ?? '' }}</strong>:
+                        {{ $activity->description }}
+                    </span>
+                    <span class="ms-auto text-muted small">{{ $activity->created_at->diffForHumans() }}</span>
+                </li>
+                @endforeach
+            </ul>
+        </div>
+    </div>
+    @endif
+
     <div class="card shadow-sm">
         <div class="card-header bg-white fw-bold">Recent Activity</div>
         <div class="card-body">
@@ -44,7 +74,7 @@
     @endroles
 
     {{-- User Dashboard --}}
-    @roles(['user'])
+    @roles(['user', 'store owner'])
     <!-- Dashboard Summary Cards -->
     <div class="row g-4 mb-5">
         <div class="col-md-4">
@@ -83,7 +113,11 @@
             <ul class="list-group">
                 @foreach($recentBookings as $booking)
                 <li class="list-group-item">
-                    {{ $booking->service_name }} – {{ $booking->date->format('M d, Y') }}
+                    <strong>{{ $booking->service_name }}</strong>
+                    @if(isset($booking->shop) && $booking->shop)
+                    <span class="text-muted">at {{ $booking->shop->shop_name }}</span>
+                    @endif
+                    <span class="float-end">{{ $booking->appointment_date ? \Carbon\Carbon::parse($booking->appointment_date)->format('M d, Y') : '—' }}</span>
                 </li>
                 @endforeach
             </ul>

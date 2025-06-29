@@ -15,8 +15,9 @@
                     <thead class="table-light">
                         <tr>
                             <th>Booking ID</th>
-                            <th>User</th>
+                            <th>Booked By</th>
                             <th>Service</th>
+                            <th>Category</th>
                             <th>Shop</th>
                             <th>Date</th>
                             <th>Status</th>
@@ -28,6 +29,7 @@
                         <tr>
                             <td>{{ $booking->public_id }}</td>
                             <td>{{ $booking->user->first_name }} {{ $booking->user->last_name }}</td>
+                            <td>{{ $booking->service_name }}</td>
                             <td>{{ $booking->shop->shop_category ?? '—' }}</td>
                             <td>{{ $booking->shop->shop_name ?? '—' }}</td>
                             <td>{{ \Carbon\Carbon::parse($booking->appointment_date)->format('M d, Y') }}</td>

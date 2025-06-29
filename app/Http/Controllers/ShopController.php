@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Shop;
+use App\Models\Activity;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -44,7 +45,13 @@ class ShopController extends Controller
             }
         }
 
-        return redirect()->route('admin.shops')->with('success', 'Shop created successfully.');
+        // Log activity
+        Activity::create([
+            'admin_id' => Auth::id(),
+            'description' => 'Created shop: ' . $shop->shop_name,
+        ]);
+
+        return redirect()->route('dashboard')->with('shop_created', 'Shop "' . $shop->shop_name . '" created successfully!');
     }
 
     public function showBookingForm()

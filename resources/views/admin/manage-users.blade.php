@@ -11,8 +11,9 @@
         <label for="role" class="me-2 mb-0 fw-semibold">Filter by Role:</label>
         <select name="role" id="role" class="form-select w-auto me-2">
             <option value="">All</option>
-            <option value="admin">Admin</option>
-            <option value="user">User</option>
+            <option value="admin" @if(request('role')==='admin' ) selected @endif>Admin</option>
+            <option value="store owner" @if(request('role')==='store owner' ) selected @endif>Store Owner</option>
+            <option value="user" @if(request('role')==='user' ) selected @endif>User</option>
         </select>
         <button type="submit" class="btn btn-primary btn-sm">Filter</button>
     </form>
@@ -35,12 +36,20 @@
                     </thead>
                     <tbody>
                         @foreach($users as $user)
-                        <tr>
+                        <tr class="user-row" data-role="{{ $user->role }}">
                             <td>{{ $user->id }}</td>
                             <td>{{ $user->first_name }} {{ $user->last_name }}</td>
                             <td>{{ $user->email }}</td>
                             <td>
-                                <span class="badge bg-{{ $user->role === 'admin' ? 'danger' : 'secondary' }}">
+                                @php
+                                $roleColors = [
+                                'admin' => 'danger',
+                                'store owner' => 'success',
+                                'user' => 'secondary',
+                                ];
+                                $badgeColor = $roleColors[$user->role] ?? 'secondary';
+                                @endphp
+                                <span class="badge bg-{{ $badgeColor }}">
                                     {{ ucfirst($user->role) }}
                                 </span>
                             </td>
@@ -61,3 +70,18 @@
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<script>
+    document.getElementById('role').addEventListener('change', function() {
+        const selected = this.value;
+        document.querySelectorAll('.user-row').forEach(row => {
+            if (!selected || row.getAttribute('data-role') === selected) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    });
+</script>
+@endpush

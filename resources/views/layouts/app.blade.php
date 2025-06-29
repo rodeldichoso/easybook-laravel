@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 </head>
 
-<body class="bg-light">
+<body class="bg-light d-flex flex-column min-vh-100">
 
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
@@ -83,14 +83,12 @@
                     </a>
                     @endroles
 
-                    @roles(['user'])
                     <a href="{{ url('/my-bookings') }}" class="list-group-item list-group-item-action {{ request()->is('my-bookings') ? 'active' : '' }}">
                         <i class="bi bi-calendar-check me-2"></i> My Bookings
                     </a>
                     <a href="{{ url('/create-booking') }}" class="list-group-item list-group-item-action {{ request()->is('create-booking') ? 'active' : '' }}">
                         <i class="bi bi-plus-circle me-2"></i> New Booking
                     </a>
-                    @endroles
 
                     <a href="{{ url('/profile') }}" class="list-group-item list-group-item-action {{ request()->is('profile') ? 'active' : '' }}">
                         <i class="bi bi-person me-2"></i> Profile
@@ -110,7 +108,7 @@
     </div>
 
     <!-- Footer -->
-    <footer class="bg-dark text-white text-center py-3 mt-4">
+    <footer class="bg-dark text-white text-center py-3 mt-4 mt-auto">
         <div class="container">
             <small>© 2025 EasyBook. All rights reserved.</small>
         </div>
