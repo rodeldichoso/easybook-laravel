@@ -1,6 +1,6 @@
 # EasyBook
 
-> **Note:** This project is for my personal training and learning purposes only. It is built with Laravel 12.19.3 and PHP 8.2.12. As of Laravel 11+, the traditional HTTP kernel file is no longer present due to the new application structure.
+> **Note:** This project is for my personal training and learning purposes only. It is built with Laravel 12.19.3 and PHP 8.2.12.
 
 EasyBook is a web-based booking platform for local services such as spas, barbers, and clinics. It allows users to easily find, book, and manage appointments, while providing admins with tools to manage shops, users, and view analytics.
 
